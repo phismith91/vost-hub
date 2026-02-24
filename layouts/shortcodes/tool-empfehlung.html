@@ -1,0 +1,21 @@
+{{/* Tool-Empfehlung Shortcode
+     Verwendung:
+     {{< tool-empfehlung
+         name="CrowdTangle"
+         kategorie="Social Media Monitoring"
+         url="https://example.com"
+         lizenz="kostenlos"
+     >}}
+     Kurze Beschreibung warum dieses Tool empfohlen wird.
+     {{< /tool-empfehlung >}}
+*/}}
+<div class="tool-empfehlung" style="border:1px solid var(--border-color, #30363d); border-radius:8px; padding:1.25rem; margin:1rem 0;">
+  <h3 style="margin-top:0;">
+    {{ with .Get "url" }}<a href="{{ . }}" rel="noopener">{{ $.Get "name" }}</a>{{ else }}{{ .Get "name" }}{{ end }}
+  </h3>
+  <dl style="margin:0.5rem 0;">
+    {{ with .Get "kategorie" }}<dt style="font-weight:600; display:inline;">Kategorie:</dt> <dd style="display:inline; margin:0;">{{ . }}</dd><br>{{ end }}
+    {{ with .Get "lizenz" }}<dt style="font-weight:600; display:inline;">Lizenz:</dt> <dd style="display:inline; margin:0;">{{ . }}</dd>{{ end }}
+  </dl>
+  {{ with .Inner }}<p style="margin-bottom:0;">{{ . }}</p>{{ end }}
+</div>

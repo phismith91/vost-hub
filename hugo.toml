@@ -1,0 +1,270 @@
+# =============================================================================
+# VOST Hub — Hugo Konfiguration
+# Alle verfuegbaren Hextra-Optionen sind dokumentiert.
+# Auskommentierte Zeilen (#) zeigen Defaults — entkommentieren zum Aendern.
+# =============================================================================
+
+# --- Basis -------------------------------------------------------------------
+baseURL = "https://vost-hub.de/"
+languageCode = "de"
+title = "VOST Hub Deutschland"
+enableRobotsTXT = true
+# enableGitInfo = true              # Git-Commit-Datum als lastmod verwenden
+# enableEmoji = false               # Emoji-Shortcodes in Markdown erlauben
+# enableInlineShortcodes = true     # Inline-Shortcodes erlauben
+
+ignoreLogs = ['warning-goldmark-raw-html']
+
+# --- Outputs -----------------------------------------------------------------
+# LLM-freundliche Outputs (llms.txt, markdown)
+# [outputs]
+#   home = ["html", "llms"]
+#   page = ["html", "markdown"]
+#   section = ["html", "rss", "markdown"]
+
+# --- Module ------------------------------------------------------------------
+[module]
+  [module.hugoVersion]
+    extended = true
+    min = "0.146.0"
+  [[module.imports]]
+    path = "github.com/imfing/hextra"
+
+# --- Taxonomien --------------------------------------------------------------
+[taxonomies]
+# Keine Taxonomien nötig für statische Seite
+# tags = "tags"
+# categories = "categories"
+
+# --- Markup -------------------------------------------------------------------
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true                 # Noetig fuer Hextra Hero-Shortcodes (inline HTML)
+    # [markup.goldmark.extensions]
+    #   [markup.goldmark.extensions.passthrough]
+    #     enable = true             # LaTeX/Math-Support
+    #     [markup.goldmark.extensions.passthrough.delimiters]
+    #       block = [['$$', '$$'], ['\[', '\]']]
+    #       inline = [['\(', '\)']]
+  [markup.highlight]
+    noClasses = false               # CSS-basiertes Syntax-Highlighting
+
+# =============================================================================
+# PARAMS — Hextra Theme Konfiguration
+# =============================================================================
+[params]
+  description = "Die zentrale Community-Plattform fuer Virtual Operations Support Teams in Deutschland"
+
+  # Links zu externen Seiten mit Icon dekorieren
+  # externalLinkDecoration = true
+
+  # Datum-Anzeige
+  # displayUpdatedDate = true       # Letzte Aenderung anzeigen
+  # dateFormat = "2. January 2006"  # Deutsches Datumsformat
+  # displayUpdatedAuthor = false    # Autor der letzten Aenderung anzeigen
+
+  # --- Author ----------------------------------------------------------------
+  [params.author]
+    name = "vost-community"
+    # email = "kontakt@vost-hub.de"
+
+  # --- Banner (oben auf der Seite) --------------------------------------------
+  # [params.banner]
+  #   key = "announcement"          # Eindeutiger Key (Cookie-basiert ausblendbar)
+  #   message = "Willkommen auf dem **VOST Hub**! Die Seite befindet sich im Aufbau."
+
+  # --- Navbar -----------------------------------------------------------------
+  [params.navbar]
+    displayTitle = true
+    displayLogo = true
+    # width = "wide"                # wide | normal
+    [params.navbar.logo]
+      path = "images/logo.svg"
+      # dark = "images/logo-dark.svg"  # Alternatives Logo fuer Dark Mode
+      # width = 40
+      # height = 20
+      # link = "/"
+
+  # --- Theme ------------------------------------------------------------------
+  [params.theme]
+    default = "system"              # light | dark | system
+    displayToggle = true
+
+  # --- Footer -----------------------------------------------------------------
+  [params.footer]
+    enable = true
+    displayCopyright = true
+    displayPoweredBy = false
+    # width = "normal"              # wide | normal
+    content = "\u00a9 2026 VOST Hub Deutschland \u2014 [Impressum](/impressum/) \u00b7 [Datenschutz](/datenschutz/)"
+
+  # --- Suche ------------------------------------------------------------------
+  [params.search]
+    enable = true
+    type = "flexsearch"
+    [params.search.flexsearch]
+      index = "content"             # content | summary | heading | title
+      tokenize = "forward"          # full | forward | reverse | strict
+
+  # --- Edit URL (GitHub "Edit this page" Link) --------------------------------
+  [params.editURL]
+    enable = true
+    base = "https://github.com/phismith91/vost-hub/edit/main/content"
+
+  # --- Seiten-Layout ----------------------------------------------------------
+  [params.page]
+    width = "normal"                # full (100%) | wide (90rem) | normal (80rem)
+    # [params.page.contextMenu]
+    #   enable = true
+    #   [[params.page.contextMenu.links]]
+    #     name = "In ChatGPT oeffnen"
+    #     icon = "chatgpt"
+    #     url = "https://chatgpt.com/?hints=search&q=Ich+lese+diese+Doku%3A+{url}%0AHilf+mir+sie+zu+verstehen."
+    #   [[params.page.contextMenu.links]]
+    #     name = "In Claude oeffnen"
+    #     icon = "claude"
+    #     url = "https://claude.ai/new?q=Ich+lese+diese+Doku%3A+{url}%0AHilf+mir+sie+zu+verstehen."
+
+  # --- Blog -------------------------------------------------------------------
+  # [params.blog]
+  #   [params.blog.list]
+  #     displayTags = true
+  #     sortBy = "date"             # date | lastmod | publishDate | title | weight
+  #     sortOrder = "desc"          # desc | asc
+  #     pagerSize = 20              # Eintraege pro Seite
+  #   [params.blog.article]
+  #     displayPagination = true
+
+  # --- Inhaltsverzeichnis (TOC) -----------------------------------------------
+  # [params.toc]
+  #   displayTags = true
+
+  # --- Code-Highlighting ------------------------------------------------------
+  [params.highlight]
+    [params.highlight.copy]
+      enable = true
+      display = "hover"             # hover | always
+
+  # --- Bild-Zoom -------------------------------------------------------------
+  # [params.imageZoom]
+  #   enable = true
+
+  # --- Kommentare (Giscus) ----------------------------------------------------
+  # [params.comments]
+  #   enable = false
+  #   type = "giscus"
+  #   [params.comments.giscus]
+  #     repo = "phismith91/vost-hub"
+  #     repoId = ""
+  #     category = "General"
+  #     categoryId = ""
+  #     # mapping = "pathname"
+  #     # reactionsEnabled = 1
+  #     # emitMetadata = 0
+  #     # inputPosition = "top"
+  #     # lang = "de"
+  #     # theme = "noborder_dark"
+
+  # --- Analytics (kein Google Analytics — Datenschutz!) ------------------------
+  # [params.analytics]
+  #   [params.analytics.matomo]
+  #     siteId = ""
+  #     instanceUrl = ""
+  #   [params.analytics.goatCounter]
+  #     code = ""
+  #   [params.analytics.umami]
+  #     websiteId = ""
+
+# =============================================================================
+# MENUS
+# =============================================================================
+[menus]
+
+  # --- Hauptnavigation --------------------------------------------------------
+  [[menus.main]]
+    name = "Mitmachen"
+    pageRef = "/mitmachen"
+    weight = 10
+  [[menus.main]]
+    name = "Community"
+    pageRef = "/community"
+    weight = 20
+  [[menus.main]]
+    name = "Wissen"
+    pageRef = "/wissen"
+    weight = 30
+  [[menus.main]]
+    identifier = "behoerden"
+    name = "Behörden"
+    pageRef = "/behoerden"
+    weight = 40
+  [[menus.main]]
+    identifier = "ueber-uns"
+    name = "Über uns"
+    pageRef = "/ueber-uns"
+    weight = 50
+
+  # --- Suche in der Navbar (Hextra built-in) ----------------------------------
+  [[menus.main]]
+    name = "Search"
+    weight = 60
+    [menus.main.params]
+      type = "search"
+
+  # --- Social Icons in der Navbar ---------------------------------------------
+  [[menus.main]]
+    name = "GitHub"
+    weight = 70
+    url = "https://github.com/vost-community/vost-hub"
+    [menus.main.params]
+      icon = "github"
+
+  # --- Dropdown-Menu Beispiel -------------------------------------------------
+  # [[menus.main]]
+  #   identifier = "mehr"
+  #   name = "Mehr"
+  #   weight = 60
+  # [[menus.main]]
+  #   identifier = "impressum-nav"
+  #   name = "Impressum"
+  #   pageRef = "/impressum"
+  #   parent = "mehr"
+  #   weight = 1
+  # [[menus.main]]
+  #   identifier = "datenschutz-nav"
+  #   name = "Datenschutz"
+  #   pageRef = "/datenschutz"
+  #   parent = "mehr"
+  #   weight = 2
+
+  # --- Sidebar-Menu (unter der Seitennavigation) -----------------------------
+  # [[menus.sidebar]]
+  #   identifier = "separator"
+  #   name = "Mehr"
+  #   [menus.sidebar.params]
+  #     type = "separator"
+  #   weight = 1
+  # [[menus.sidebar]]
+  #   identifier = "vost-academy"
+  #   name = "VOSTacademy ↗"
+  #   url = "https://www.vost-academy.eu"
+  #   weight = 2
+  # [[menus.sidebar]]
+  #   identifier = "hugo-docs"
+  #   name = "Hugo Docs ↗"
+  #   url = "https://gohugo.io/documentation/"
+  #   weight = 3
+
+# =============================================================================
+# SPRACHEN (Mehrsprachigkeit — fuer spaeter)
+# =============================================================================
+# [languages]
+#   [languages.de]
+#     languageName = "Deutsch"
+#     weight = 1
+#     title = "VOST Hub Deutschland"
+#   [languages.en]
+#     languageName = "English"
+#     weight = 2
+#     title = "VOST Hub Germany"

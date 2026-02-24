@@ -1,0 +1,97 @@
+name: CI — Build & Test
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+
+      - name: Hugo Setup
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: '0.152.2'
+          extended: true
+
+      - name: Hugo Module laden
+        run: hugo mod tidy
+
+      - name: Build (mit Draft-Erkennung)
+        run: hugo --minify
+
+      - name: Pruefe Build-Ausgabe
+        run: |
+          echo "=== Build-Statistik ==="
+          echo "Generierte Dateien:"
+          find public -name "*.html" | wc -l
+          echo "HTML-Dateien gefunden"
+
+      - name: Pruefe kritische Seiten
+        run: |
+          MISSING=""
+          for page in index.html mitmachen/index.html community/index.html behoerden/index.html wissen/index.html impressum/index.html datenschutz/index.html; do
+            if [ ! -f "public/$page" ]; then
+              MISSING="$MISSING $page"
+            fi
+          done
+          if [ -n "$MISSING" ]; then
+            echo "FEHLER: Kritische Seiten fehlen:$MISSING"
+            exit 1
+          fi
+          echo "Alle kritischen Seiten vorhanden."
+
+      - name: HTML-Validierung (Grundpruefung)
+        run: |
+          ERRORS=0
+          for file in $(find public -name "*.html" | head -20); do
+            if ! grep -q '<!DOCTYPE html>' "$file" 2>/dev/null && ! grep -q '<!doctype html>' "$file" 2>/dev/null; then
+              echo "WARNUNG: Kein DOCTYPE in $file"
+            fi
+            if ! grep -q '<html' "$file" 2>/dev/null; then
+              echo "FEHLER: Kein <html> Tag in $file"
+              ERRORS=$((ERRORS + 1))
+            fi
+            if ! grep -q 'lang=' "$file" 2>/dev/null; then
+              echo "WARNUNG: Kein lang-Attribut in $file"
+            fi
+          done
+          if [ "$ERRORS" -gt 0 ]; then
+            echo "HTML-Validierung fehlgeschlagen: $ERRORS Fehler"
+            exit 1
+          fi
+          echo "HTML-Grundpruefung bestanden."
+
+      - name: Pruefe auf kaputte interne Links
+        run: |
+          ERRORS=0
+          for file in $(find public -name "*.html"); do
+            # Pruefe href-Links die mit / starten (interne Links)
+            for link in $(grep -oP 'href="/[^"]*"' "$file" | sed 's/href="//;s/"$//' | sort -u); do
+              # Entferne Anker
+              clean_link=$(echo "$link" | sed 's/#.*//')
+              if [ -z "$clean_link" ] || [ "$clean_link" = "/" ]; then
+                continue
+              fi
+              # Pruefe ob Ziel existiert
+              target="public${clean_link}"
+              if [ ! -f "${target}index.html" ] && [ ! -f "${target}" ] && [ ! -d "${target}" ]; then
+                echo "Kaputter Link: $link (in $file)"
+                ERRORS=$((ERRORS + 1))
+              fi
+            done
+          done
+          if [ "$ERRORS" -gt 0 ]; then
+            echo "Gefunden: $ERRORS kaputte interne Links"
+            exit 1
+          fi
+          echo "Alle internen Links OK."

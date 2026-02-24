@@ -1,0 +1,22 @@
+{{/* Team-Karte Shortcode
+     Verwendung:
+     {{< team-karte
+         name="VOST Niedersachsen"
+         region="Niedersachsen"
+         traeger="THW"
+         website="https://example.org"
+         kontakt="info@example.org"
+     >}}
+     Kurze Beschreibung des Teams.
+     {{< /team-karte >}}
+*/}}
+<div class="team-karte" style="border:1px solid var(--border-color, #30363d); border-radius:8px; padding:1.25rem; margin:1rem 0;">
+  <h3 style="margin-top:0;">{{ .Get "name" }}</h3>
+  <dl style="margin:0.5rem 0;">
+    {{ with .Get "region" }}<dt style="font-weight:600; display:inline;">Region:</dt> <dd style="display:inline; margin:0;">{{ . }}</dd><br>{{ end }}
+    {{ with .Get "traeger" }}<dt style="font-weight:600; display:inline;">Traeger:</dt> <dd style="display:inline; margin:0;">{{ . }}</dd><br>{{ end }}
+    {{ with .Get "website" }}<dt style="font-weight:600; display:inline;">Website:</dt> <dd style="display:inline; margin:0;"><a href="{{ . }}" rel="noopener">{{ . }}</a></dd><br>{{ end }}
+    {{ with .Get "kontakt" }}<dt style="font-weight:600; display:inline;">Kontakt:</dt> <dd style="display:inline; margin:0;">{{ . }}</dd>{{ end }}
+  </dl>
+  {{ with .Inner }}<p style="margin-bottom:0;">{{ . }}</p>{{ end }}
+</div>
